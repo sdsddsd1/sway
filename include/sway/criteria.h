@@ -1,7 +1,9 @@
 #ifndef _SWAY_CRITERIA_H
 #define _SWAY_CRITERIA_H
 
+#ifdef HAVE_PCRE
 #include <pcre.h>
+#endif
 #include "config.h"
 #include "list.h"
 #include "tree/view.h"
@@ -21,7 +23,9 @@ enum pattern_type {
 
 struct pattern {
 	enum pattern_type match_type;
+#ifdef HAVE_PCRE
 	pcre *regex;
+#endif
 };
 
 struct criteria {

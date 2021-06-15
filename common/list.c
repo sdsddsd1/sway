@@ -35,7 +35,7 @@ void list_add(list_t *list, void *item) {
 	list->items[list->length++] = item;
 }
 
-void list_insert(list_t *list, int index, void *item) {
+void sway_list_insert(list_t *list, int index, void *item) {
 	list_resize(list);
 	memmove(&list->items[index + 1], &list->items[index], sizeof(void*) * (list->length - index));
 	list->length++;

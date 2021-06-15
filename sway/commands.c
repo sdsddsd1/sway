@@ -5,7 +5,9 @@
 #include <string.h>
 #include <strings.h>
 #include <stdio.h>
+#ifdef HAVE_JSON
 #include <json.h>
+#endif
 #include "sway/commands.h"
 #include "sway/config.h"
 #include "sway/criteria.h"
@@ -530,6 +532,7 @@ void free_cmd_results(struct cmd_results *results) {
 	free(results);
 }
 
+#ifdef HAVE_JSON
 char *cmd_results_to_json(list_t *res_list) {
 	json_object *result_array = json_object_new_array();
 	for (int i = 0; i < res_list->length; ++i) {
@@ -550,3 +553,4 @@ char *cmd_results_to_json(list_t *res_list) {
 	json_object_put(result_array);
 	return res;
 }
+#endif

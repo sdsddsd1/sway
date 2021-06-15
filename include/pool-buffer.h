@@ -1,16 +1,20 @@
 #ifndef _SWAY_BUFFERS_H
 #define _SWAY_BUFFERS_H
+#ifdef HAVE_FONTS
 #include <cairo.h>
 #include <pango/pangocairo.h>
+#endif
 #include <stdbool.h>
 #include <stdint.h>
 #include <wayland-client.h>
 
 struct pool_buffer {
 	struct wl_buffer *buffer;
+#ifdef HAVE_FONTS
 	cairo_surface_t *surface;
 	cairo_t *cairo;
 	PangoContext *pango;
+#endif
 	uint32_t width, height;
 	void *data;
 	size_t size;

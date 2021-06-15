@@ -4,7 +4,9 @@
 #include <assert.h>
 #include <errno.h>
 #include <fcntl.h>
+#ifdef HAVE_JSON
 #include <json.h>
+#endif
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -303,6 +305,7 @@ void ipc_event_workspace(struct sway_workspace *old,
 	if (!ipc_has_event_listeners(IPC_EVENT_WORKSPACE)) {
 		return;
 	}
+#ifdef HAVE_JSON
 	sway_log(SWAY_DEBUG, "Sending workspace::%s event", change);
 	json_object *obj = json_object_new_object();
 	json_object_object_add(obj, "change", json_object_new_string(change));
@@ -323,12 +326,14 @@ void ipc_event_workspace(struct sway_workspace *old,
 	const char *json_string = json_object_to_json_string(obj);
 	ipc_send_event(json_string, IPC_EVENT_WORKSPACE);
 	json_object_put(obj);
+#endif
 }
 
 void ipc_event_window(struct sway_container *window, const char *change) {
 	if (!ipc_has_event_listeners(IPC_EVENT_WINDOW)) {
 		return;
 	}
+#ifdef HAVE_JSON
 	sway_log(SWAY_DEBUG, "Sending window::%s event", change);
 	json_object *obj = json_object_new_object();
 	json_object_object_add(obj, "change", json_object_new_string(change));
@@ -338,18 +343,21 @@ void ipc_event_window(struct sway_container *window, const char *change) {
 	const char *json_string = json_object_to_json_string(obj);
 	ipc_send_event(json_string, IPC_EVENT_WINDOW);
 	json_object_put(obj);
+#endif
 }
 
 void ipc_event_barconfig_update(struct bar_config *bar) {
 	if (!ipc_has_event_listeners(IPC_EVENT_BARCONFIG_UPDATE)) {
 		return;
 	}
+#ifdef HAVE_JSON
 	sway_log(SWAY_DEBUG, "Sending barconfig_update event");
 	json_object *json = ipc_json_describe_bar_config(bar);
 
 	const char *json_string = json_object_to_json_string(json);
 	ipc_send_event(json_string, IPC_EVENT_BARCONFIG_UPDATE);
 	json_object_put(json);
+#endif
 }
 
 void ipc_event_bar_state_update(struct bar_config *bar) {
@@ -358,6 +366,7 @@ void ipc_event_bar_state_update(struct bar_config *bar) {
 	}
 	sway_log(SWAY_DEBUG, "Sending bar_state_update event");
 
+#ifdef HAVE_JSON
 	json_object *json = json_object_new_object();
 	json_object_object_add(json, "id", json_object_new_string(bar->id));
 	json_object_object_add(json, "visible_by_modifier",
@@ -366,12 +375,14 @@ void ipc_event_bar_state_update(struct bar_config *bar) {
 	const char *json_string = json_object_to_json_string(json);
 	ipc_send_event(json_string, IPC_EVENT_BAR_STATE_UPDATE);
 	json_object_put(json);
+#endif
 }
 
 void ipc_event_mode(const char *mode, bool pango) {
 	if (!ipc_has_event_listeners(IPC_EVENT_MODE)) {
 		return;
 	}
+#ifdef HAVE_JSON
 	sway_log(SWAY_DEBUG, "Sending mode::%s event", mode);
 	json_object *obj = json_object_new_object();
 	json_object_object_add(obj, "change", json_object_new_string(mode));
@@ -381,12 +392,14 @@ void ipc_event_mode(const char *mode, bool pango) {
 	const char *json_string = json_object_to_json_string(obj);
 	ipc_send_event(json_string, IPC_EVENT_MODE);
 	json_object_put(obj);
+#endif
 }
 
 void ipc_event_shutdown(const char *reason) {
 	if (!ipc_has_event_listeners(IPC_EVENT_SHUTDOWN)) {
 		return;
 	}
+#ifdef HAVE_JSON
 	sway_log(SWAY_DEBUG, "Sending shutdown::%s event", reason);
 
 	json_object *json = json_object_new_object();
@@ -395,6 +408,7 @@ void ipc_event_shutdown(const char *reason) {
 	const char *json_string = json_object_to_json_string(json);
 	ipc_send_event(json_string, IPC_EVENT_SHUTDOWN);
 	json_object_put(json);
+#endif
 }
 
 void ipc_event_binding(struct sway_binding *binding) {
@@ -403,6 +417,7 @@ void ipc_event_binding(struct sway_binding *binding) {
 	}
 	sway_log(SWAY_DEBUG, "Sending binding event");
 
+#ifdef HAVE_JSON
 	json_object *json_binding = json_object_new_object();
 	json_object_object_add(json_binding, "command", json_object_new_string(binding->command));
 
@@ -481,12 +496,14 @@ void ipc_event_binding(struct sway_binding *binding) {
 	const char *json_string = json_object_to_json_string(json);
 	ipc_send_event(json_string, IPC_EVENT_BINDING);
 	json_object_put(json);
+#endif
 }
 
 static void ipc_event_tick(const char *payload) {
 	if (!ipc_has_event_listeners(IPC_EVENT_TICK)) {
 		return;
 	}
+#ifdef HAVE_JSON
 	sway_log(SWAY_DEBUG, "Sending tick event");
 
 	json_object *json = json_object_new_object();
@@ -496,12 +513,14 @@ static void ipc_event_tick(const char *payload) {
 	const char *json_string = json_object_to_json_string(json);
 	ipc_send_event(json_string, IPC_EVENT_TICK);
 	json_object_put(json);
+#endif
 }
 
 void ipc_event_input(const char *change, struct sway_input_device *device) {
 	if (!ipc_has_event_listeners(IPC_EVENT_INPUT)) {
 		return;
 	}
+#ifdef HAVE_JSON
 	sway_log(SWAY_DEBUG, "Sending input event");
 
 	json_object *json = json_object_new_object();
@@ -511,6 +530,7 @@ void ipc_event_input(const char *change, struct sway_input_device *device) {
 	const char *json_string = json_object_to_json_string(json);
 	ipc_send_event(json_string, IPC_EVENT_INPUT);
 	json_object_put(json);
+#endif
 }
 
 int ipc_client_handle_writable(int client_fd, uint32_t mask, void *data) {
@@ -579,6 +599,7 @@ void ipc_client_disconnect(struct ipc_client *client) {
 
 static void ipc_get_workspaces_callback(struct sway_workspace *workspace,
 		void *data) {
+#ifdef HAVE_JSON
 	json_object *workspace_json = ipc_json_describe_node(&workspace->node);
 	// override the default focused indicator because
 	// it's set differently for the get_workspaces reply
@@ -594,14 +615,17 @@ static void ipc_get_workspaces_callback(struct sway_workspace *workspace,
 	bool visible = workspace == focused_ws;
 	json_object_object_add(workspace_json, "visible",
 			json_object_new_boolean(visible));
+#endif
 }
 
 static void ipc_get_marks_callback(struct sway_container *con, void *data) {
+#ifdef HAVE_JSON
 	json_object *marks = (json_object *)data;
 	for (int i = 0; i < con->marks->length; ++i) {
 		char *mark = (char *)con->marks->items[i];
 		json_object_array_add(marks, json_object_new_string(mark));
 	}
+#endif
 }
 
 void ipc_client_handle_command(struct ipc_client *client, uint32_t payload_length,
@@ -632,6 +656,7 @@ void ipc_client_handle_command(struct ipc_client *client, uint32_t payload_lengt
 	switch (payload_type) {
 	case IPC_COMMAND:
 	{
+#ifdef HAVE_JSON
 		char *line = strtok(buf, "\n");
 		while (line) {
 			size_t line_length = strlen(line);
@@ -654,6 +679,7 @@ void ipc_client_handle_command(struct ipc_client *client, uint32_t payload_lengt
 			list_del(res_list, 0);
 		}
 		list_free(res_list);
+#endif
 		goto exit_cleanup;
 	}
 
@@ -666,6 +692,7 @@ void ipc_client_handle_command(struct ipc_client *client, uint32_t payload_lengt
 
 	case IPC_GET_OUTPUTS:
 	{
+#ifdef HAVE_JSON
 		json_object *outputs = json_object_new_array();
 		for (int i = 0; i < root->outputs->length; ++i) {
 			struct sway_output *output = root->outputs->items[i];
@@ -696,22 +723,26 @@ void ipc_client_handle_command(struct ipc_client *client, uint32_t payload_lengt
 		ipc_send_reply(client, payload_type, json_string,
 			(uint32_t)strlen(json_string));
 		json_object_put(outputs); // free
+#endif
 		goto exit_cleanup;
 	}
 
 	case IPC_GET_WORKSPACES:
 	{
+#ifdef HAVE_JSON
 		json_object *workspaces = json_object_new_array();
 		root_for_each_workspace(ipc_get_workspaces_callback, workspaces);
 		const char *json_string = json_object_to_json_string(workspaces);
 		ipc_send_reply(client, payload_type, json_string,
 			(uint32_t)strlen(json_string));
 		json_object_put(workspaces); // free
+#endif
 		goto exit_cleanup;
 	}
 
 	case IPC_SUBSCRIBE:
 	{
+#ifdef HAVE_JSON
 		// TODO: Check if they're permitted to use these events
 		struct json_object *request = json_tokener_parse(buf);
 		if (request == NULL || !json_object_is_type(request, json_type_array)) {
@@ -761,11 +792,13 @@ void ipc_client_handle_command(struct ipc_client *client, uint32_t payload_lengt
 			ipc_send_reply(client, IPC_EVENT_TICK, tickmsg,
 				strlen(tickmsg));
 		}
+#endif
 		goto exit_cleanup;
 	}
 
 	case IPC_GET_INPUTS:
 	{
+#ifdef HAVE_JSON
 		json_object *inputs = json_object_new_array();
 		struct sway_input_device *device = NULL;
 		wl_list_for_each(device, &server.input->devices, link) {
@@ -775,11 +808,13 @@ void ipc_client_handle_command(struct ipc_client *client, uint32_t payload_lengt
 		ipc_send_reply(client, payload_type, json_string,
 			(uint32_t)strlen(json_string));
 		json_object_put(inputs); // free
+#endif
 		goto exit_cleanup;
 	}
 
 	case IPC_GET_SEATS:
 	{
+#ifdef HAVE_JSON
 		json_object *seats = json_object_new_array();
 		struct sway_seat *seat = NULL;
 		wl_list_for_each(seat, &server.input->seats, link) {
@@ -789,42 +824,50 @@ void ipc_client_handle_command(struct ipc_client *client, uint32_t payload_lengt
 		ipc_send_reply(client, payload_type, json_string,
 			(uint32_t)strlen(json_string));
 		json_object_put(seats); // free
+#endif
 		goto exit_cleanup;
 	}
 
 	case IPC_GET_TREE:
 	{
+#ifdef HAVE_JSON
 		json_object *tree = ipc_json_describe_node_recursive(&root->node);
 		const char *json_string = json_object_to_json_string(tree);
 		ipc_send_reply(client, payload_type, json_string,
 			(uint32_t)strlen(json_string));
 		json_object_put(tree);
+#endif
 		goto exit_cleanup;
 	}
 
 	case IPC_GET_MARKS:
 	{
+#ifdef HAVE_JSON
 		json_object *marks = json_object_new_array();
 		root_for_each_container(ipc_get_marks_callback, marks);
 		const char *json_string = json_object_to_json_string(marks);
 		ipc_send_reply(client, payload_type, json_string,
 			(uint32_t)strlen(json_string));
 		json_object_put(marks);
+#endif
 		goto exit_cleanup;
 	}
 
 	case IPC_GET_VERSION:
 	{
+#ifdef HAVE_JSON
 		json_object *version = ipc_json_get_version();
 		const char *json_string = json_object_to_json_string(version);
 		ipc_send_reply(client, payload_type, json_string,
 			(uint32_t)strlen(json_string));
 		json_object_put(version); // free
+#endif
 		goto exit_cleanup;
 	}
 
 	case IPC_GET_BAR_CONFIG:
 	{
+#ifdef HAVE_JSON
 		if (!buf[0]) {
 			// Send list of configured bar IDs
 			json_object *bars = json_object_new_array();
@@ -858,11 +901,13 @@ void ipc_client_handle_command(struct ipc_client *client, uint32_t payload_lengt
 				(uint32_t)strlen(json_string));
 			json_object_put(json); // free
 		}
+#endif
 		goto exit_cleanup;
 	}
 
 	case IPC_GET_BINDING_MODES:
 	{
+#ifdef HAVE_JSON
 		json_object *modes = json_object_new_array();
 		for (int i = 0; i < config->modes->length; i++) {
 			struct sway_mode *mode = config->modes->items[i];
@@ -872,27 +917,32 @@ void ipc_client_handle_command(struct ipc_client *client, uint32_t payload_lengt
 		ipc_send_reply(client, payload_type, json_string,
 			(uint32_t)strlen(json_string));
 		json_object_put(modes); // free
+#endif
 		goto exit_cleanup;
 	}
 
 	case IPC_GET_BINDING_STATE:
 	{
+#ifdef HAVE_JSON
 		json_object *current_mode = ipc_json_get_binding_mode();
 		const char *json_string = json_object_to_json_string(current_mode);
 		ipc_send_reply(client, payload_type, json_string,
 			(uint32_t)strlen(json_string));
 		json_object_put(current_mode); // free
+#endif
 		goto exit_cleanup;
 	}
 
 	case IPC_GET_CONFIG:
 	{
+#ifdef HAVE_JSON
 		json_object *json = json_object_new_object();
 		json_object_object_add(json, "config", json_object_new_string(config->current_config));
 		const char *json_string = json_object_to_json_string(json);
 		ipc_send_reply(client, payload_type, json_string,
 			(uint32_t)strlen(json_string));
 		json_object_put(json); // free
+#endif
 		goto exit_cleanup;
 	}
 

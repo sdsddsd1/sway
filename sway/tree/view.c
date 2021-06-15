@@ -1,5 +1,6 @@
 #define _POSIX_C_SOURCE 200809L
 #include <stdlib.h>
+#include <float.h>
 #include <strings.h>
 #include <wayland-server-core.h>
 #include <wlr/render/wlr_renderer.h>

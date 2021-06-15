@@ -1,5 +1,7 @@
+#ifdef HAVE_FONTS
 #include <cairo.h>
 #include <pango/pangocairo.h>
+#endif
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -50,6 +52,7 @@ size_t escape_markup_text(const char *src, char *dest) {
 	return length;
 }
 
+#ifdef HAVE_FONTS
 PangoLayout *get_pango_layout(cairo_t *cairo, const char *font,
 		const char *text, double scale, bool markup) {
 	PangoLayout *layout = pango_cairo_create_layout(cairo);
@@ -136,3 +139,5 @@ void pango_printf(cairo_t *cairo, const char *font,
 	g_object_unref(layout);
 	free(buf);
 }
+
+#endif

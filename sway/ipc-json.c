@@ -1,5 +1,7 @@
 #include <float.h>
+#ifdef HAVE_JSON
 #include <json.h>
+#endif
 #include <libevdev/libevdev.h>
 #include <stdio.h>
 #include <ctype.h>
@@ -171,6 +173,7 @@ static const char *ipc_json_user_idle_inhibitor_description(enum sway_idle_inhib
 	return NULL;
 }
 
+#ifdef HAVE_JSON
 json_object *ipc_json_get_version(void) {
 	int major = 0, minor = 0, patch = 0;
 	json_object *version = json_object_new_object();
@@ -451,6 +454,7 @@ static void ipc_json_describe_workspace(struct sway_workspace *workspace,
 	}
 	json_object_object_add(object, "floating_nodes", floating_array);
 }
+#endif
 
 static void get_deco_rect(struct sway_container *c, struct wlr_box *deco_rect) {
 	enum sway_container_layout parent_layout = container_parent_layout(c);
@@ -489,6 +493,7 @@ static void get_deco_rect(struct sway_container *c, struct wlr_box *deco_rect) {
 	}
 }
 
+#ifdef HAVE_JSON
 static void ipc_json_describe_view(struct sway_container *c, json_object *object) {
 	json_object_object_add(object, "pid", json_object_new_int(c->view->pid));
 
@@ -1049,6 +1054,8 @@ json_object *ipc_json_describe_seat(struct sway_seat *seat) {
 	return object;
 }
 
+#endif
+
 static uint32_t event_to_x11_button(uint32_t event) {
 	switch (event) {
 	case BTN_LEFT:
@@ -1074,6 +1081,7 @@ static uint32_t event_to_x11_button(uint32_t event) {
 	}
 }
 
+#ifdef HAVE_JSON
 json_object *ipc_json_describe_bar_config(struct bar_config *bar) {
 	if (!sway_assert(bar, "Bar must not be NULL")) {
 		return NULL;
@@ -1290,3 +1298,4 @@ json_object *ipc_json_get_binding_mode(void) {
 			json_object_new_string(config->current_mode->name));
 	return current_mode;
 }
+#endif

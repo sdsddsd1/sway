@@ -1,6 +1,10 @@
 #include <stdint.h>
+#ifdef HAVE_FONTS
 #include <cairo.h>
+#endif
 #include "cairo_util.h"
+
+#ifdef HAVE_FONTS
 
 void cairo_set_source_u32(cairo_t *cairo, uint32_t color) {
 	cairo_set_source_rgba(cairo,
@@ -42,3 +46,5 @@ cairo_surface_t *cairo_image_surface_scale(cairo_surface_t *image,
 	cairo_destroy(cairo);
 	return new;
 }
+
+#endif

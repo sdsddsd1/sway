@@ -638,11 +638,11 @@ void workspace_output_raise_priority(struct sway_workspace *ws,
 	if (new_index < 0) {
 		char identifier[128];
 		output_get_identifier(identifier, sizeof(identifier), output);
-		list_insert(ws->output_priority, old_index, strdup(identifier));
+		sway_list_insert(ws->output_priority, old_index, strdup(identifier));
 	} else if (new_index > old_index) {
 		char *name = ws->output_priority->items[new_index];
 		list_del(ws->output_priority, new_index);
-		list_insert(ws->output_priority, old_index, name);
+		sway_list_insert(ws->output_priority, old_index, name);
 	}
 }
 
@@ -828,7 +828,7 @@ void workspace_add_floating(struct sway_workspace *workspace,
 
 void workspace_insert_tiling_direct(struct sway_workspace *workspace,
 		struct sway_container *con, int index) {
-	list_insert(workspace->tiling, index, con);
+	sway_list_insert(workspace->tiling, index, con);
 	con->pending.workspace = workspace;
 	container_for_each_child(con, set_workspace, NULL);
 	container_handle_fullscreen_reparent(con);

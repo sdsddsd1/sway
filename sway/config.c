@@ -865,12 +865,12 @@ bool read_config(FILE *file, struct sway_config *config,
 
 		case CMD_BLOCK_COMMANDS:
 			sway_log(SWAY_DEBUG, "Entering commands block");
-			list_insert(stack, 0, "<commands>");
+			sway_list_insert(stack, 0, "<commands>");
 			break;
 
 		case CMD_BLOCK:
 			sway_log(SWAY_DEBUG, "Entering block '%s'", new_block);
-			list_insert(stack, 0, strdup(new_block));
+			sway_list_insert(stack, 0, strdup(new_block));
 			if (strcmp(new_block, "bar") == 0) {
 				config->current_bar = NULL;
 			}

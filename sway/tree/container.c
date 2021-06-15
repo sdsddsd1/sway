@@ -1,6 +1,8 @@
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <drm_fourcc.h>
+#include <limits.h>
+#include <float.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -512,6 +514,7 @@ static void update_title_texture(struct sway_container *con,
 
 	// We must use a non-nil cairo_t for cairo_set_font_options to work.
 	// Therefore, we cannot use cairo_create(NULL).
+#ifdef HAVE_FONTS
 	cairo_surface_t *dummy_surface = cairo_image_surface_create(
 			CAIRO_FORMAT_ARGB32, 0, 0);
 	cairo_t *c = cairo_create(dummy_surface);
@@ -530,11 +533,13 @@ static void update_title_texture(struct sway_container *con,
 			config->pango_markup, "%s", con->formatted_title);
 	cairo_surface_destroy(dummy_surface);
 	cairo_destroy(c);
+#endif
 
 	if (width == 0 || height == 0) {
 		return;
 	}
 
+#ifdef HAVE_FONTS
 	cairo_surface_t *surface = cairo_image_surface_create(
 			CAIRO_FORMAT_ARGB32, width, height);
 	cairo_t *cairo = cairo_create(surface);
@@ -562,6 +567,7 @@ static void update_title_texture(struct sway_container *con,
 	cairo_surface_destroy(surface);
 	g_object_unref(pango);
 	cairo_destroy(cairo);
+#endif
 }
 
 void container_update_title_textures(struct sway_container *container) {
@@ -577,9 +583,12 @@ void container_update_title_textures(struct sway_container *container) {
 }
 
 void container_calculate_title_height(struct sway_container *container) {
+#ifdef HAVE_FONTS
 	if (!container->formatted_title) {
+#endif
 		container->title_height = 0;
 		return;
+#ifdef HAVE_FONTS
 	}
 	cairo_t *cairo = cairo_create(NULL);
 	int height;
@@ -589,6 +598,7 @@ void container_calculate_title_height(struct sway_container *container) {
 	cairo_destroy(cairo);
 	container->title_height = height;
 	container->title_baseline = baseline;
+#endif
 }
 
 /**
@@ -1353,7 +1363,7 @@ void container_insert_child(struct sway_container *parent,
 	if (child->pending.workspace) {
 		container_detach(child);
 	}
-	list_insert(parent->pending.children, i, child);
+	sway_list_insert(parent->pending.children, i, child);
 	child->pending.parent = parent;
 	child->pending.workspace = parent->pending.workspace;
 	container_for_each_child(child, set_workspace, NULL);
@@ -1368,7 +1378,7 @@ void container_add_sibling(struct sway_container *fixed,
 	}
 	list_t *siblings = container_get_siblings(fixed);
 	int index = list_find(siblings, fixed);
-	list_insert(siblings, index + after, active);
+	sway_list_insert(siblings, index + after, active);
 	active->pending.parent = fixed->pending.parent;
 	active->pending.workspace = fixed->pending.workspace;
 	container_for_each_child(active, set_workspace, NULL);
@@ -1618,15 +1628,18 @@ static void update_marks_texture(struct sway_container *con,
 	int width = 0;
 	int height = con->title_height * scale;
 
+#ifdef HAVE_FONTS
 	cairo_t *c = cairo_create(NULL);
 	get_text_size(c, config->font, &width, NULL, NULL, scale, false,
 			"%s", buffer);
 	cairo_destroy(c);
+#endif
 
 	if (width == 0 || height == 0) {
 		return;
 	}
 
+#ifdef HAVE_FONTS
 	cairo_surface_t *surface = cairo_image_surface_create(
 			CAIRO_FORMAT_ARGB32, width, height);
 	cairo_t *cairo = cairo_create(surface);
@@ -1652,6 +1665,7 @@ static void update_marks_texture(struct sway_container *con,
 	g_object_unref(pango);
 	cairo_destroy(cairo);
 	free(buffer);
+#endif
 }
 
 void container_update_marks_textures(struct sway_container *con) {

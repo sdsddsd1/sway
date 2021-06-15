@@ -1,8 +1,12 @@
 #define _POSIX_C_SOURCE 200809
 #include <assert.h>
+#ifdef HAVE_FONTS
 #include <cairo.h>
+#endif
 #include <fcntl.h>
+#ifdef HAVE_FONTS
 #include <pango/pangocairo.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -78,10 +82,12 @@ static struct pool_buffer *create_buffer(struct wl_shm *shm,
 	buf->width = width;
 	buf->height = height;
 	buf->data = data;
+#ifdef HAVE_FONTS
 	buf->surface = cairo_image_surface_create_for_data(data,
 			CAIRO_FORMAT_ARGB32, width, height, stride);
 	buf->cairo = cairo_create(buf->surface);
 	buf->pango = pango_cairo_create_context(buf->cairo);
+#endif
 
 	wl_buffer_add_listener(buf->buffer, &buffer_listener, buf);
 	return buf;
@@ -91,6 +97,7 @@ void destroy_buffer(struct pool_buffer *buffer) {
 	if (buffer->buffer) {
 		wl_buffer_destroy(buffer->buffer);
 	}
+#ifdef HAVE_FONTS
 	if (buffer->cairo) {
 		cairo_destroy(buffer->cairo);
 	}
@@ -100,6 +107,7 @@ void destroy_buffer(struct pool_buffer *buffer) {
 	if (buffer->pango) {
 		g_object_unref(buffer->pango);
 	}
+#endif
 	if (buffer->data) {
 		munmap(buffer->data, buffer->size);
 	}

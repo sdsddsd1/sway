@@ -1,6 +1,8 @@
 #define _POSIX_C_SOURCE 200809L
 #include <getopt.h>
+#ifdef HAVE_FONTS
 #include <pango/pangocairo.h>
+#endif
 #include <signal.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -404,7 +406,9 @@ shutdown:
 	free(config_path);
 	free_config(config);
 
+#ifdef HAVE_FONTS
 	pango_cairo_font_map_set_default(NULL);
+#endif
 
 	return exit_value;
 }

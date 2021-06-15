@@ -25,6 +25,7 @@ enum background_mode parse_background_mode(const char *mode) {
 }
 
 #if HAVE_GDK_PIXBUF
+#ifdef HAVE_FONTS
 static cairo_surface_t* gdk_cairo_image_surface_create_from_pixbuf(
 		const GdkPixbuf *gdkbuf) {
 	int chan = gdk_pixbuf_get_n_channels(gdkbuf);
@@ -119,8 +120,10 @@ static cairo_surface_t* gdk_cairo_image_surface_create_from_pixbuf(
 	cairo_surface_mark_dirty(cs);
 	return cs;
 }
+#endif // HAVE_FONTS
 #endif // HAVE_GDK_PIXBUF
 
+#ifdef HAVE_FONTS
 cairo_surface_t *load_background_image(const char *path) {
 	cairo_surface_t *image;
 #if HAVE_GDK_PIXBUF
@@ -218,3 +221,5 @@ void render_background_image(cairo_t *cairo, cairo_surface_t *image,
 	cairo_paint(cairo);
 	cairo_restore(cairo);
 }
+
+#endif
