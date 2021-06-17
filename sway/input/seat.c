@@ -54,7 +54,7 @@ static void seat_node_destroy(struct sway_seat_node *seat_node) {
 	free(seat_node);
 }
 
-void seat_destroy(struct sway_seat *seat) {
+void sway_seat_destroy(struct sway_seat *seat) {
 	if (seat == config->handler_context.seat) {
 		config->handler_context.seat = input_manager_get_default_seat();
 	}
