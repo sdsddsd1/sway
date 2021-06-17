@@ -361,7 +361,7 @@ int main(int argc, char **argv) {
 
 	root = root_create();
 
-	if (!server_init(&server)) {
+	if (!sway_server_init(&server)) {
 		return 1;
 	}
 

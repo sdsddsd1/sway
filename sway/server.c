@@ -57,7 +57,7 @@ bool server_privileged_prepare(struct sway_server *server) {
 	return true;
 }
 
-bool server_init(struct sway_server *server) {
+bool sway_server_init(struct sway_server *server) {
 	sway_log(SWAY_DEBUG, "Initializing Wayland server");
 
 	struct wlr_renderer *renderer = wlr_backend_get_renderer(server->backend);
