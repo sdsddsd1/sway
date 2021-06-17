@@ -131,7 +131,7 @@ struct sway_keyboard_shortcuts_inhibitor {
 	struct wl_list link; // sway_seat::keyboard_shortcuts_inhibitors
 };
 
-struct sway_seat *seat_create(const char *seat_name);
+struct sway_seat *sway_seat_create(const char *seat_name);
 
 void sway_seat_destroy(struct sway_seat *seat);
 

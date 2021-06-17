@@ -47,7 +47,7 @@ struct sway_seat *input_manager_get_seat(const char *seat_name, bool create) {
 		}
 	}
 
-	return create ? seat_create(seat_name) : NULL;
+	return create ? sway_seat_create(seat_name) : NULL;
 }
 
 struct sway_seat *input_manager_sway_seat_from_wlr_seat(struct wlr_seat *wlr_seat) {

@@ -543,7 +543,7 @@ static void collect_focus_container_iter(struct sway_container *container,
 	collect_focus_iter(&container->node, data);
 }
 
-struct sway_seat *seat_create(const char *seat_name) {
+struct sway_seat *sway_seat_create(const char *seat_name) {
 	struct sway_seat *seat = calloc(1, sizeof(struct sway_seat));
 	if (!seat) {
 		return NULL;
