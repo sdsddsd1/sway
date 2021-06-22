@@ -178,9 +178,9 @@ struct cmd_results *cmd_workspace(int argc, char **argv) {
 				"Can't switch workspaces while fullscreen global");
 		}
 
-		bool no_auto_back_and_forth = false;
+		bool auto_back_and_forth = true;
 		while (strcasecmp(argv[0], "--no-auto-back-and-forth") == 0) {
-			no_auto_back_and_forth = true;
+			auto_back_and_forth = false;
 			if ((error = checkarg(--argc, "workspace", EXPECTED_AT_LEAST, 1))) {
 				return error;
 			}
@@ -209,6 +209,9 @@ struct cmd_results *cmd_workspace(int argc, char **argv) {
 				ws = workspace_create(NULL, name);
 				free(name);
 			}
+			if (ws && auto_back_and_forth) {
+				ws = workspace_auto_back_and_forth(ws);
+			}
 		} else if (strcasecmp(argv[0], "next") == 0 ||
 				strcasecmp(argv[0], "prev") == 0 ||
 				strcasecmp(argv[0], "current") == 0) {
@@ -231,11 +234,14 @@ struct cmd_results *cmd_workspace(int argc, char **argv) {
 				ws = workspace_create(NULL, name);
 			}
 			free(name);
+			if (ws && auto_back_and_forth) {
+				ws = workspace_auto_back_and_forth(ws);
+			}
 		}
 		if (!ws) {
 			return cmd_results_new(CMD_FAILURE, "No workspace to switch to");
 		}
-		workspace_switch(ws, no_auto_back_and_forth);
+		workspace_switch(ws);
 		seat_consider_warp_to_focus(seat);
 	}
 	return cmd_results_new(CMD_SUCCESS, NULL);
