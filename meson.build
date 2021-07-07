@@ -3,7 +3,7 @@ project(
 	'c',
 	version: '1.6',
 	license: 'MIT',
-	meson_version: '>=0.53.0',
+	meson_version: '>=0.58.1',
 	default_options: [
 		'c_std=c11',
 		'warning_level=2',
@@ -128,7 +128,7 @@ conf_data.set10('HAVE_TRAY', have_tray)
 
 scdoc = dependency('scdoc', version: '>=1.9.2', native: true, required: get_option('man-pages'))
 if scdoc.found()
-	scdoc_prog = find_program(scdoc.get_pkgconfig_variable('scdoc'), native: true)
+	scdoc_prog = find_program(scdoc.get_variable(pkgconfig: 'scdoc'), native: true)
 	sh = find_program('sh', native: true)
 	mandir = get_option('mandir')
 	man_files = [
@@ -153,7 +153,7 @@ if scdoc.found()
 			input: filename,
 			output: output,
 			command: [
-				sh, '-c', '@0@ < @INPUT@ > @1@'.format(scdoc_prog.path(), output)
+				sh, '-c', '@0@ < @INPUT@ > @1@'.format(scdoc_prog.full_path(), output)
 			],
 			install: true,
 			install_dir: '@0@/man@1@'.format(mandir, section)
@@ -180,7 +180,7 @@ add_project_arguments('-DSWAY_VERSION=@0@'.format(version), language: 'c')
 
 # Compute the relative path used by compiler invocations.
 source_root = meson.current_source_dir().split('/')
-build_root = meson.build_root().split('/')
+build_root = meson.global_build_root().split('/')
 relative_dir_parts = []
 i = 0
 in_prefix = true
@@ -278,9 +278,9 @@ if get_option('bash-completions')
 		'completions/bash/swaymsg',
 	)
 	if bash_comp.found()
-		bash_install_dir = bash_comp.get_pkgconfig_variable(
-			'completionsdir',
-			define_variable: ['datadir', datadir]
+		bash_install_dir = bash_comp.get_variable(
+			pkgconfig: 'completionsdir',
+			pkgconfig_define: ['datadir', datadir]
 		)
 	else
 		bash_install_dir = join_paths(datadir, 'bash-completion', 'completions')
@@ -296,9 +296,9 @@ if get_option('fish-completions')
 		'completions/fish/swaynag.fish',
 	)
 	if fish_comp.found()
-		fish_install_dir = fish_comp.get_pkgconfig_variable(
-			'completionsdir',
-			define_variable: ['datadir', datadir]
+		fish_install_dir = fish_comp.get_variable(
+			pkgconfig: 'completionsdir',
+			pkgconfig_define: ['datadir', datadir]
 		)
 	else
 		fish_install_dir = join_paths(datadir, 'fish', 'vendor_completions.d')
