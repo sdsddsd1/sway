@@ -218,11 +218,8 @@ subdir('include')
 subdir('protocols')
 subdir('common')
 subdir('sway')
-subdir('swaymsg')
 
 subdir('client')
-subdir('swaybar')
-subdir('swaynag')
 
 config = configuration_data()
 config.set('datadir', join_paths(prefix, datadir))
