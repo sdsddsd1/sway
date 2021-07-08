@@ -35,17 +35,13 @@ if is_freebsd
 	add_project_arguments('-D_C11_SOURCE', language: 'c')
 endif
 
-jsonc = dependency('json-c', version: '>=0.13')
-pcre = dependency('libpcre')
 wayland_server = dependency('wayland-server')
 wayland_client = dependency('wayland-client')
 wayland_cursor = dependency('wayland-cursor')
 wayland_egl = dependency('wayland-egl')
 wayland_protos = dependency('wayland-protocols', version: '>=1.14')
 xkbcommon = dependency('xkbcommon')
-cairo = dependency('cairo')
 pango = dependency('pango')
-pangocairo = dependency('pangocairo')
 gdk_pixbuf = dependency('gdk-pixbuf-2.0', required: get_option('gdk-pixbuf'))
 pixman = dependency('pixman-1')
 glesv2 = dependency('glesv2')
